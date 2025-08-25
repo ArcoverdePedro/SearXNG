@@ -1,0 +1,56 @@
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: always
+    networks:
+      - searxng-network
+    volumes:
+      - ./searxng:/etc/searxng
+    environment:
+      - BASE_URL=https://pedro.local/
+      - INSTANCE_NAME=SearXNG Local
+      - SEARXNG_SECRET=pedro
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+
+  valkey:
+    image: valkey/valkey:alpine
+    container_name: valkey
+    restart: always
+    networks:
+      - searxng-network
+    volumes:
+      - ./valkey/valkey.conf:/etc/valkey/valkey.conf
+      - valkey-data:/data
+    command: ["valkey-server", "/etc/valkey/valkey.conf"]
+
+  caddy:
+    image: caddy:alpine
+    container_name: caddy
+    restart: always
+    networks:
+      - searxng-network
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - searxng
+
+networks:
+  searxng-network:
+    driver: bridge
+
+volumes:
+  valkey-data:
+  caddy-data:
+  caddy-config:
