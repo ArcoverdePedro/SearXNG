@@ -19,16 +19,16 @@ services:
       - SETUID
       - DAC_OVERRIDE
 
-  redis:
-      image: redis:7-alpine
-      container_name: redis
-      restart: always
-      networks:
-        - searxng-network
-      volumes:
-        - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-        - redis-data:/data
-      command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  valkey:
+    image: valkey/valkey:alpine
+    container_name: valkey
+    restart: always
+    networks:
+      - searxng-network
+    volumes:
+      - ./valkey/valkey.conf:/etc/valkey/valkey.conf
+      - valkey-data:/data
+    command: ["valkey-server", "/etc/valkey/valkey.conf"]
 
   caddy:
     image: caddy:alpine
@@ -51,6 +51,6 @@ networks:
     driver: bridge
 
 volumes:
-  redis-data:
+  valkey-data:
   caddy-data:
   caddy-config:
