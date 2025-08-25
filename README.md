@@ -1,0 +1,1 @@
+![SearXNG Badge](https://img.shields.io/badge/SearXNG-3050FF?logo=searxng&logoColor=fff&style=for-the-badge) ![Caddy Badge](https://img.shields.io/badge/Caddy-1F88C0?logo=caddy&logoColor=fff&style=for-the-badge) ![Redis Badge](https://img.shields.io/badge/Redis-FF4438?logo=redis&logoColor=fff&style=for-the-badge)
