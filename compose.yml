@@ -8,7 +8,7 @@ services:
     volumes:
       - ./searxng:/etc/searxng
     environment:
-      - SEARXNG_BASE_URL=https://pedro.local/
+      - SEARXNG_BASE_URL=https://buscar.local/
       - INSTANCE_NAME=SearXNG Local
       - SEARXNG_SECRET=pedro
       - SEARXNG_BIND_ADDRESS=0.0.0.0
