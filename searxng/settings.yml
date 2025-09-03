@@ -32,11 +32,11 @@ brand:
 
 search:
   # Filter results. 0: None, 1: Moderate, 2: Strict
-  safe_search: 0
+  safe_search: 2
   # Existing autocomplete backends: "360search", "baidu", "brave", "dbpedia", "duckduckgo", "google", "yandex",
   # "mwmbl", "naver", "seznam", "sogou", "startpage", "stract", "swisscows", "quark", "qwant", "wikipedia" -
   # leave blank to turn it off by default.
-  autocomplete: ""
+  autocomplete: "duckduckgo"
   # minimun characters to type before autocompleter starts
   autocomplete_min: 4
   # backend for the favicon near URL in search results.
@@ -80,8 +80,8 @@ search:
 
 server:
   # Is overwritten by ${SEARXNG_PORT} and ${SEARXNG_BIND_ADDRESS}
-  port: 8080
-  bind_address: "0.0.0.0"
+  port: 8888
+  bind_address: "127.0.0.1"
   # public URL of the instance, to ensure correct inbound links. Is overwritten
   # by ${SEARXNG_BASE_URL}.
   base_url: false  # "http://example.com/location"
@@ -95,13 +95,14 @@ server:
   # If your instance owns a /etc/searxng/settings.yml file, then set the following
   # values there.
 
-  secret_key: "ultrasecretkey"  # Is overwritten by ${SEARXNG_SECRET}
+  secret_key: "7eBGzMGyB7RCTgyU93Jm4zqWG8ZPKbBU"  # Is overwritten by ${SEARXNG_SECRET}
   # Proxy image results through SearXNG. Is overwritten by ${SEARXNG_IMAGE_PROXY}
   image_proxy: false
   # 1.0 and 1.1 are supported
   http_protocol_version: "1.0"
-  # POST queries are more secure as they don't show up in history but may cause
-  # problems when using Firefox containers.
+  # POST queries are "more secure!" but are also the source of hard-to-locate
+  # annoyances, which is why GET may be better for end users and their browsers.
+  # see https://github.com/searxng/searxng/pull/3619
   # Is overwritten by ${SEARXNG_METHOD}
   method: "POST"
   default_http_headers:
@@ -114,7 +115,7 @@ valkey:
   # URL to connect valkey database. Is overwritten by ${SEARXNG_VALKEY_URL}.
   # https://docs.searxng.org/admin/settings/settings_valkey.html#settings-valkey
   # url: valkey://localhost:6379/0
-  url: valkey://valkey:6379/0
+  url: false
 
 ui:
   # Custom static path - leave it blank if you didn't change
@@ -139,7 +140,7 @@ ui:
   # results_on_new_tab: false
   theme_args:
     # style of simple theme: auto, light, dark
-    simple_style: auto
+    simple_style: dark
   # Perform search immediately if a category selected.
   # Disable to select multiple categories at once and start the search manually.
   search_on_category_select: true
@@ -235,6 +236,9 @@ plugins:
     active: true
 
   searx.plugins.hostnames.SXNGPlugin:
+    active: true
+
+  searx.plugins.time_zone.SXNGPlugin:
     active: true
 
   searx.plugins.oa_doi_rewrite.SXNGPlugin:
@@ -1951,6 +1955,7 @@ engines:
     engine: searchcode_code
     shortcut: scc
     disabled: true
+    inactive: true
 
   # - name: searx
   #   engine: searx_engine
@@ -2519,6 +2524,12 @@ engines:
     paging: true
     categories: videos
     disabled: true
+
+  - name: repology
+    engine: repology
+    shortcut: rep
+    disabled: true
+    inactive: true
 
   - name: livespace
     engine: livespace
