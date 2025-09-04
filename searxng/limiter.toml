@@ -26,7 +26,7 @@ trusted_proxies = [
 filter_link_local = false
 
 # activate link_token method in the ip_limit method
-link_token = false
+link_token = true
 
 [botdetection.ip_lists]
 

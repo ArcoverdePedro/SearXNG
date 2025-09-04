@@ -38,7 +38,7 @@ search:
   # leave blank to turn it off by default.
   autocomplete: "duckduckgo"
   # minimun characters to type before autocompleter starts
-  autocomplete_min: 4
+  autocomplete_min: 3
   # backend for the favicon near URL in search results.
   # Available resolvers: "allesedv", "duckduckgo", "google", "yandex" - leave blank to turn it off by default.
   favicon_resolver: ""
@@ -88,7 +88,7 @@ server:
   base_url: false  # "http://example.com/location"
   # rate limit the number of request on the instance, block some bots.
   # Is overwritten by ${SEARXNG_LIMITER}
-  limiter: false
+  limiter: true
   # enable features designed only for public instances.
   # Is overwritten by ${SEARXNG_PUBLIC_INSTANCE}
   public_instance: true
@@ -243,10 +243,10 @@ plugins:
     active: true
 
   searx.plugins.oa_doi_rewrite.SXNGPlugin:
-    active: false
+    active: true
 
   searx.plugins.tor_check.SXNGPlugin:
-    active: false
+    active: true
 
   searx.plugins.tracker_url_remover.SXNGPlugin:
     active: true
@@ -901,7 +901,6 @@ engines:
   - name: fdroid
     engine: fdroid
     shortcut: fd
-    disabled: true
 
   - name: findthatmeme
     engine: findthatmeme
