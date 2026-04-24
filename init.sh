@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Define as entradas
-HOSTS_ENTRY_IPV4="127.0.0.1 buscar.local"
-HOSTS_ENTRY_IPV6="::1 buscar.local"
+HOSTS_ENTRY_IPV4="127.0.0.1 searxng.lan"
+HOSTS_ENTRY_IPV6="::1 searxng.lan"
 HOSTS_FILE="/etc/hosts"
 
 # Verifica se o script está sendo executado como root
@@ -17,11 +17,11 @@ echo "Configurando o arquivo $HOSTS_FILE..."
 # O `grep -q` suprime a saída, e o `||` executa o segundo comando
 # se o primeiro falhar (ou seja, se a entrada não for encontrada).
 grep -q "$HOSTS_ENTRY_IPV4" "$HOSTS_FILE" || echo "$HOSTS_ENTRY_IPV4" >> "$HOSTS_FILE"
-echo "Entrada IPv4 para buscar.local garantida."
+echo "Entrada IPv4 para searxng.lan garantida."
 
 # Adiciona a entrada IPv6 se não existir.
 grep -q "$HOSTS_ENTRY_IPV6" "$HOSTS_FILE" || echo "$HOSTS_ENTRY_IPV6" >> "$HOSTS_FILE"
-echo "Entrada IPv6 para buscar.local garantida."
+echo "Entrada IPv6 para searxng.lan garantida."
 
 echo "Configuração do arquivo de hosts concluída."
 
@@ -29,7 +29,7 @@ echo "Configuração do arquivo de hosts concluída."
 
 echo ""
 echo "Inicializando o Docker Compose..."
-# Usa 'sudo -E' para manter as variáveis de ambiente necessárias para o Docker
+
 sudo -E docker compose up -d
 
 echo "Script concluído."
