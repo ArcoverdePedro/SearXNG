@@ -49,8 +49,6 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy-data:/data
       - caddy-config:/config
-    depends_on:
-      - searxng
 
 networks:
   searxng-network:
