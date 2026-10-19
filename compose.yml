@@ -1,20 +1,15 @@
 services:
   searxng:
     image: searxng/searxng:latest
-    container_name: searxng
-    restart: always
-    networks:
-      - searxng-network
+    restart: unless-stopped
     volumes:
       - ./searxng:/etc/searxng
     environment:
-      - SEARXNG_BASE_URL=http://searxng.lan/
-      - INSTANCE_NAME=SearXNG Local
-      - SEARXNG_SECRET=pedro
-      - SEARXNG_BIND_ADDRESS=0.0.0.0
-      - SEARXNG_PORT=8080
-      # Autenticação no Valkey
-      - SEARXNG_VALKEY_URL=valkey://default:essaehumasenhaforte@valkey:6379/0
+      SEARXNG_BASE_URL: ${SITE_URL:?Defina SITE_URL no .env}
+      SEARXNG_SECRET: ${SEARXNG_SECRET:?Execute ./init.sh para gerar a chave}
+      SEARXNG_BIND_ADDRESS: 0.0.0.0
+      SEARXNG_PORT: "8080"
+      SEARXNG_VALKEY_URL: valkey://valkey:6379/0
     cap_drop:
       - ALL
     cap_add:
@@ -23,38 +18,21 @@ services:
       - SETUID
       - DAC_OVERRIDE
     depends_on:
-      - valkey
+      valkey:
+        condition: service_healthy
 
   valkey:
     image: valkey/valkey:alpine
-    container_name: valkey
-    restart: always
-    networks:
-      - searxng-network
+    restart: unless-stopped
     volumes:
-      - ./valkey/valkey.conf:/etc/valkey/valkey.conf
+      - ./valkey/valkey.conf:/etc/valkey/valkey.conf:ro
       - valkey-data:/data
     command: ["valkey-server", "/etc/valkey/valkey.conf"]
-
-  caddy:
-    image: caddy:alpine
-    container_name: caddy
-    restart: always
-    networks:
-      - searxng-network
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy-data:/data
-      - caddy-config:/config
-
-networks:
-  searxng-network:
-    driver: bridge
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
 volumes:
   valkey-data:
-  caddy-data:
-  caddy-config:
