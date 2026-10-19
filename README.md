@@ -52,6 +52,18 @@ O mesmo init aceita comandos do Compose:
 
 Para trocar de modo, pare o anterior com `down` (sem `-v`) e inicie o novo. Ajuste `SITE_URL` ao trocar. Os volumes mantêm os dados; não use `down -v` para uma troca normal.
 
+## Atualizar containers
+
+```sh
+./update.sh --with-caddy
+# ou, se usa acesso direto/proxy próprio:
+./update.sh --without-caddy
+```
+
+Sem argumentos, o script pergunta qual modo está em uso. Ele valida o Compose, baixa as imagens e executa `up -d` para recriar os serviços que mudaram, preservando `.env`, configurações e volumes. Se o download falhar, não inicia a recriação. Não executa `down`, `git pull` nem limpeza de imagens. Escolha o mesmo modo usado na inicialização; este comando não serve para trocar de modo. Pode haver uma breve interrupção durante a recriação.
+
+Ao terminar, mostra o estado dos containers. Para conferir os logs, use `./init.sh --with-caddy logs -f` (ou `--without-caddy`). Tags/digests fixos só serão atualizados após editar a versão no Compose.
+
 ## Organização
 
 - `compose.yml`: SearXNG e Valkey, sem portas publicadas.
